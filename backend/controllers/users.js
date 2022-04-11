@@ -105,7 +105,7 @@ const login = (req, res, next) => {
       //   sameSite: true,
       // })
       // .send({ data: user.toJSON });
-      res.send({ token });
+      res.send({ token }, user);
     })
     .catch(() => {
       next(new SigninErr('Неверный логин или пароль'));
