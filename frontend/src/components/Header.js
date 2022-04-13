@@ -12,6 +12,7 @@ function Header(props) {
         props.setIsLoggedIn(false)
         localStorage.removeItem('token')
         props.history.push('/sign-up')
+        // console.log('token')
     }
     
     return(

@@ -39,16 +39,20 @@ export function App() {
 
 
     React.useEffect(() => {
+        const token = localStorage.getItem('token');
         checkToken()
-        Promise.all([api.getUserFromSrv(), api.getInitialCards()])
-            .then(([profile, card]) =>{
-                setCurrentUser(profile.user)
-                setCards(card)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
+        if (token) {
+            
+            Promise.all([api.getUserFromSrv(), api.getInitialCards()])
+                .then(([profile, card]) =>{
+                    setCurrentUser(profile.user)
+                    setCards(card)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }, [isLoggedIn])
 
     function checkToken() {
         const token = localStorage.getItem('token');
@@ -58,6 +62,7 @@ export function App() {
             setIsLoggedIn(true);
             history.push('/')
             setEmail(data.user.email)
+            return setCurrentUser(data.user)
           })
           .catch((err) => {
             console.log(err);
@@ -71,25 +76,14 @@ export function App() {
             { email, password})
         .then((data)=>{
                 localStorage.setItem('token', data.token)
-                checkToken()
-                setIsLoggedIn(true)
-                setCurrentUser(data.user)
                 handleSignin()
                 history.push('/')
                 setEmail(email)
-                setIsTooltipOpen(false)
-                setIsErrMsg(false)
             })
-        // .then((user) =>{
-        //     setCurrentUser(user.user)
-        // })
         .catch((err)=>{
             console.log(err)
         })
-        // .then(console.log(isLoggedIn))
         .then(() => {
-            // setIsTooltipOpen(true)
-            // setIsErrMsg(true)
             console.log(isLoggedIn)
         })
     }
